@@ -1,0 +1,24 @@
+kind: HTTPScaledObject
+apiVersion: http.keda.sh/v1alpha1
+metadata:
+  name: sad-leela-97941162a0-scaler
+  namespace: apps-prod
+spec:
+  hosts:
+    - cc1fbde45ead-in-south-01.mayson.dev
+  pathPrefixes:
+    - /us-west-2-backstractelb-dc21da-coll-bb41dfc9b26843b79d1e846650a0637a/ # e.g. /infallible-naveen-... sad-leela-97941162a0/
+  scaleTargetRef:
+    name: sad-leela-97941162a0-depl
+    kind: Deployment
+    apiVersion: apps/v1
+    service: sad-leela-97941162a0-srv # e.g. coll-8a2a...-srv
+    port: 80
+  replicas:
+    min: 0
+    max: 10
+  scaledownPeriod: 604800 #inseconds
+  scalingMetric:
+    requestRate:
+      targetValue: 100
+      window: 1m
